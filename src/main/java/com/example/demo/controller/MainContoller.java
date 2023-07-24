@@ -8,9 +8,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class MainContoller {
 
-    @GetMapping(value = "/{name}")
-    public String showMain(Model model, @PathVariable("name")String name) {
-        model.addAttribute("name", name);
+    @GetMapping(value = "/")
+    public String showMain(){
         return "Main";
     }
 
