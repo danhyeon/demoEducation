@@ -8,12 +8,12 @@ spring:
     password: 1234
 
   jpa:
+    properties:
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
     hibernate:
-      ddl-auto: create
-      show-sql: true
-      properties:
-        hibernate.format_sql: true
-        dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+      ddl_auto: create
+      show_sql: true
+      format_sql: true
 
   mvc:
     static-path-pattern: /**
@@ -30,3 +30,11 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     cache: false
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace

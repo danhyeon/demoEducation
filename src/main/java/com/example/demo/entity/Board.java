@@ -1,16 +1,13 @@
 package com.example.demo.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.example.demo.dto.BoardDto;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "board")
-@Getter
-@Setter
+@Data
 @ToString
 @NoArgsConstructor
 public class Board {
@@ -24,4 +21,17 @@ public class Board {
 
     @Column(nullable = false)
     private String writer;
+
+    @Builder
+    Board(String title, String writer) {
+        this.title = title;
+        this.writer = writer;
+    }
+
+    public static Board createBoard(BoardDto boardDto) {
+        return Board.builder()
+                .title(boardDto.getTitle())
+                .writer(boardDto.getWriter())
+                .build();
+    }
 }
