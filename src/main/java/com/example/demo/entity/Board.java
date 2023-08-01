@@ -20,17 +20,22 @@ public class Board {
     private String title;
 
     @Column(nullable = false)
+    private String content;
+
+//    @Column(nullable = false)
     private String writer;
 
     @Builder
-    Board(String title, String writer) {
+    Board(String title, String content, String writer) {
         this.title = title;
+        this.content = content;
         this.writer = writer;
     }
 
     public static Board createBoard(BoardDto boardDto) {
         return Board.builder()
                 .title(boardDto.getTitle())
+                .content(boardDto.getContent())
                 .writer(boardDto.getWriter())
                 .build();
     }

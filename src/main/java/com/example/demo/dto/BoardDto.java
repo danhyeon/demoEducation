@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 public class BoardDto {
     private Long id;
     private String title;
+    private String content;
     private String writer;
 
     private static ModelMapper modelmapper = new ModelMapper();
