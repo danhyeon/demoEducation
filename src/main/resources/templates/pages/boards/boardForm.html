@@ -47,10 +47,12 @@
                 <label>제목</label>
                 <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요">
               </div>
+              <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError"></p>
               <div class="form-group">
                 <label>내용</label>
                 <textarea class="form-control" th:field="*{content}" rows="10" placeholder="내용을 입력하세요"></textarea>
               </div>
+              <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"></p>
             </form>
           </div>
         </div>
