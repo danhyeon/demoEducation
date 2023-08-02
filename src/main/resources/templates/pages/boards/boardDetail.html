@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/layout_common}">
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+    function deleteBoard(obj) {
+      let id = obj.dataset.id;
+      let url = "/board/delete/" + id;
+      $.ajax({
+        url: url,
+        type: "DELETE",
+        cache: false,
+        success: function(data) {
+          location.replace("/board/info");
+          history.pushState(null, null, location.href);
+          window.onpopstate = function(event) {
+            history.go(1);
+          };
+        }
+      })
+    }
+  </script>
+</th:block>
+
+<th:block layout:fragment="css">
+  <style th:inline="css">
+  </style>
+</th:block>
+
+<th:block layout:fragment="content">
+  <div class="content-wrapper">
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>상세 보기</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">상세 보기</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="content">
+      <div class="card card-default">
+        <div class="card-header">
+          <h4 class="card-title">상세 내용</h4>
+          <div class="btn-group float-right">
+            <button type="button" class="btn btn-primary btn-sm mr-1">수정</button>
+            <button type="button" th:data-id="${bid}" class="btn btn-primary btn-sm" onclick="deleteBoard(this)">삭제</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <form id="boardForm" method="post" action="/board/form" th:object="${boardDto}">
+              <div class="form-group">
+                <label>제목</label>
+                <input type="text" th:value="*{title}" class="form-control" disabled>
+              </div>
+              <div class="form-group">
+                <label>내용</label>
+                <textarea class="form-control" th:text="*{content}" rows="10" disabled></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</th:block>
+</html>

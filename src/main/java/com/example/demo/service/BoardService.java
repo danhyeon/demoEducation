@@ -43,4 +43,19 @@ public class BoardService {
         return boardDtos;
     }
 
+<<<<<<< Updated upstream
+=======
+    public BoardDto showDetail(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(EntityExistsException::new);
+        return BoardDto.of(board);
+    }
+
+    public void deleteBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                        .orElseThrow(EntityExistsException::new);
+        boardRepository.delete(board);
+    }
+
+>>>>>>> Stashed changes
 }
