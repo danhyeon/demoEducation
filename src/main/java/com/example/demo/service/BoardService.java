@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import javax.persistence.EntityExistsException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +43,16 @@ public class BoardService {
         return boardDtos;
     }
 
-<<<<<<< Updated upstream
-=======
     public BoardDto showDetail(Long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(EntityExistsException::new);
         return BoardDto.of(board);
+    }
+
+    public void updateBoard(BoardDto boardDto) {
+        Board board = boardRepository.findById(boardDto.getId())
+                .orElseThrow(EntityExistsException::new);
+        board.updateBoard(boardDto);
     }
 
     public void deleteBoard(Long boardId) {
@@ -57,5 +61,4 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
->>>>>>> Stashed changes
 }
