@@ -9,14 +9,12 @@
 </th:block>
 
 <script th:inline="javascript">
+  function deleteBoard() {
+
+  }
 </script>
 
 <th:block layout:fragment="css">
-  <style>
-    .fieldError {
-      color: #bd2130;
-    }
-  </style>
 </th:block>
 
 <style th:inline="css">
@@ -28,12 +26,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>글쓰기</h1>
+            <h1>상세 보기</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">글쓰기</li>
+              <li class="breadcrumb-item active">상세 보기</li>
             </ol>
           </div>
         </div>
@@ -42,22 +40,21 @@
     <section class="content">
       <div class="card card-default">
         <div class="card-header">
-          <h4 class="card-title">글쓰기</h4>
-          <button type="submit" form="boardForm" class="btn btn-primary btn-sm float-right">저장</button>
+          <h4 class="card-title">상세 내용</h4>
+          <button type="button" class="btn btn-primary btn-sm float-right">수정</button>
+          <button type="button" class="btn btn-primary btn-sm float-right" onclick="deleteBoard()">삭제</button>
         </div>
         <div class="card-body">
           <div class="container-fluid">
             <form id="boardForm" method="post" action="/board/form" th:object="${boardDto}">
               <div class="form-group">
                 <label>제목</label>
-                <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요">
+                <input type="text" th:value="*{title}" class="form-control" disabled>
               </div>
-              <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError"></p>
               <div class="form-group">
                 <label>내용</label>
-                <textarea class="form-control" th:field="*{content}" rows="10" placeholder="내용을 입력하세요"></textarea>
+                <textarea class="form-control" th:text="*{content}" rows="10" disabled></textarea>
               </div>
-              <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"></p>
             </form>
           </div>
         </div>
