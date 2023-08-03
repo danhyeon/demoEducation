@@ -36,6 +36,7 @@
         type: "PATCH",
         data: JSON.stringify(boardDto),
         dataType: "json",
+        contentType: "application/json;charset='UTF-8'",
         cache: false,
         success: function() {
           $('.form-control').attr('disabled', true);
