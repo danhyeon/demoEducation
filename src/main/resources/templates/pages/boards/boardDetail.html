@@ -6,19 +6,58 @@
       layout:decorate="~{layouts/layout_common}">
 
 <th:block layout:fragment="script">
+  <script th:inline="javascript">
+    function deleteBoard(obj) {
+      let id = obj.dataset.id;
+      let url = "/board/delete/" + id;
+      $.ajax({
+        url: url,
+        type: "DELETE",
+        cache: false,
+        success: function(data) {
+          location.replace("/board/info");
+          history.pushState(null, null, location.href);
+          window.onpopstate = function(event) {
+            history.go(1);
+          };
+        }
+      })
+    }
+    function saveBoard(obj) {
+      let id = obj.dataset.id;
+      let url = "/board/update";
+      let boardDto = {
+        id:id,
+        title:$('#title').val(),
+        content:$('#content').val(),
+      };
+      $.ajax({
+        url: url,
+        type: "PATCH",
+        data: JSON.stringify(boardDto),
+        dataType: "json",
+        contentType: "application/json;charset='UTF-8'",
+        cache: false,
+        success: function() {
+          $('.form-control').attr('disabled', true);
+          $('#updateBtn').css('display', 'block');
+          $('#saveBtn').css('display', 'none');
+        }
+      })
+    }
+
+    function updateInit() {
+      $('.form-control').attr('disabled', false);
+      $('#updateBtn').css('display', 'none');
+      $('#saveBtn').css('display', 'block');
+    }
+  </script>
 </th:block>
-
-<script th:inline="javascript">
-  function deleteBoard() {
-
-  }
-</script>
 
 <th:block layout:fragment="css">
+  <style th:inline="css">
+  </style>
 </th:block>
-
-<style th:inline="css">
-</style>
 
 <th:block layout:fragment="content">
   <div class="content-wrapper">
@@ -41,21 +80,23 @@
       <div class="card card-default">
         <div class="card-header">
           <h4 class="card-title">상세 내용</h4>
-          <button type="button" class="btn btn-primary btn-sm float-right">수정</button>
-          <button type="button" class="btn btn-primary btn-sm float-right" onclick="deleteBoard()">삭제</button>
+          <div class="btn-group float-right">
+            <button type="button" class="btn btn-primary btn-sm" onclick="location.href='/board/info'">목록</button>
+            <button type="button" id="saveBtn" th:data-id="${bid}" class="btn btn-primary btn-sm" style="display: none;" onclick="saveBoard(this)">저장</button>
+            <button type="button" id="updateBtn" class="btn btn-primary btn-sm" onclick="updateInit()">수정</button>
+            <button type="button" th:data-id="${bid}" class="btn btn-primary btn-sm" onclick="deleteBoard(this)">삭제</button>
+          </div>
         </div>
         <div class="card-body">
           <div class="container-fluid">
-            <form id="boardForm" method="post" action="/board/form" th:object="${boardDto}">
-              <div class="form-group">
-                <label>제목</label>
-                <input type="text" th:value="*{title}" class="form-control" disabled>
-              </div>
-              <div class="form-group">
-                <label>내용</label>
-                <textarea class="form-control" th:text="*{content}" rows="10" disabled></textarea>
-              </div>
-            </form>
+            <div class="form-group">
+              <label>제목</label>
+              <input type="text" id="title" th:value="${boardDto.title}" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+              <label>내용</label>
+              <textarea class="form-control" id="content" th:text="${boardDto.content}" rows="10" disabled></textarea>
+            </div>
           </div>
         </div>
       </div>

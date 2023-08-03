@@ -1,18 +1,17 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.BoardDto;
-import com.example.demo.entity.Board;
-import com.example.demo.repository.BoardRepository;
 import com.example.demo.service.BoardService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,7 +35,7 @@ public class BoardController {
     }
 
     @PostMapping(value = "/form")
-    public String boardSave(@Valid BoardDto boardDto, BindingResult bindingResult) {
+    public String boardSave(@Valid BoardDto boardDto, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
             return "/pages/boards/boardForm";
         }
@@ -46,7 +45,22 @@ public class BoardController {
 
     @GetMapping(value = "/detail/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model) {
-        model.addAttribute("boardDto", boardService.showDetail(boardId));
+        BoardDto boardDto = boardService.showDetail(boardId);
+        model.addAttribute("boardDto", boardDto);
+        model.addAttribute("bid", boardDto.getId());
         return "/pages/boards/boardDetail";
+    }
+
+    @PatchMapping(value = "/update")
+    public ResponseEntity boardUpdate(@RequestBody BoardDto boardDto) {
+        System.out.println(boardDto);
+        boardService.updateBoard(boardDto);
+        return new ResponseEntity<Long>(boardDto.getId(), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/delete/{boardId}")
+    public ResponseEntity boardDelete(@PathVariable Long boardId) {
+        boardService.deleteBoard(boardId);
+        return new ResponseEntity<Long>(boardId, HttpStatus.OK);
     }
 }

@@ -1,22 +1,22 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.Board;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.modelmapper.ModelMapper;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
+//@NoArgsConstructor
+@RequiredArgsConstructor
 public class BoardDto {
     private Long id;
-    @NotBlank(message = "제목은 필수 입력입니다")
+    @NotBlank(message = "제목은 필수 입력입니다.")
     private String title;
-    @NotBlank(message = "내용은 필수 입력입니다")
+    @NotBlank(message = "내용은 필수 입력입니다.")
     private String content;
     private String writer;
 

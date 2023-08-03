@@ -49,4 +49,16 @@ public class BoardService {
         return BoardDto.of(board);
     }
 
+    public void updateBoard(BoardDto boardDto) {
+        Board board = boardRepository.findById(boardDto.getId())
+                .orElseThrow(EntityExistsException::new);
+        board.updateBoard(boardDto);
+    }
+
+    public void deleteBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                        .orElseThrow(EntityExistsException::new);
+        boardRepository.delete(board);
+    }
+
 }

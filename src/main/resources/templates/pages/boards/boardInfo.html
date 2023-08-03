@@ -6,19 +6,23 @@
       layout:decorate="~{layouts/layout_common}">
 
 <th:block layout:fragment="script">
+  <script th:inline="javascript">
+      function showDetail(obj) {
+        let id = $(obj).children().first().text();
+        let url = "/board/detail/" + id;
+        location.replace(url);
+        history.pushState(null, null, location.href);
+        window.onpopstate = function(event) {
+          history.go(1);
+        };
+      }
+  </script>
 </th:block>
-
-<script th:inline="javascript">
-  function writeBoard() {
-    location.replace('board/form');
-  }
-</script>
 
 <th:block layout:fragment="css">
+  <style th:inline="css">
+  </style>
 </th:block>
-
-<style th:inline="css">
-</style>
 
 <th:block layout:fragment="content">
   <div class="content-wrapper">
@@ -54,7 +58,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="board : ${boards}">
+              <tr th:each="board : ${boards}" onclick="showDetail(this)">
                 <th scope="row" th:text="${board.id}"></th>
                 <td th:text="${board.title}"></td>
                 <td th:text="${board.writer}"></td>
