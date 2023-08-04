@@ -16,10 +16,6 @@
         cache: false,
         success: function(data) {
           location.replace("/board/info");
-          history.pushState(null, null, location.href);
-          window.onpopstate = function(event) {
-            history.go(1);
-          };
         }
       })
     }

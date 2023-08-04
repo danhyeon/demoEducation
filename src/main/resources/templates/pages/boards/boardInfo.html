@@ -11,10 +11,6 @@
         let id = $(obj).children().first().text();
         let url = "/board/detail/" + id;
         location.replace(url);
-        history.pushState(null, null, location.href);
-        window.onpopstate = function(event) {
-          history.go(1);
-        };
       }
   </script>
 </th:block>
