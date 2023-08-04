@@ -53,7 +53,6 @@ public class BoardController {
 
     @PatchMapping(value = "/update")
     public ResponseEntity boardUpdate(@RequestBody BoardDto boardDto) {
-        System.out.println(boardDto);
         boardService.updateBoard(boardDto);
         return new ResponseEntity<Long>(boardDto.getId(), HttpStatus.OK);
     }
