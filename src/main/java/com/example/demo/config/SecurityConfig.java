@@ -1,9 +1,12 @@
 package com.example.demo.config;
 
+import com.example.demo.security.LoginFailHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -19,7 +22,7 @@ public class SecurityConfig {
                 .loginPage("/member/login")
                 .defaultSuccessUrl("/")
                 .usernameParameter("email")
-//                .failureHandler(loginFailHandler())
+                .failureHandler(loginFailHandler())
 //                .failureUrl()
                 .and()
                 .logout()
@@ -31,11 +34,19 @@ public class SecurityConfig {
                 ;
 
         httpSecurity.authorizeRequests()
-                .mvcMatchers("/").hasAnyRole("USER", "ADMIN")
+                .mvcMatchers("/").permitAll()
+                .mvcMatchers("/member").permitAll()
+                .mvcMatchers("/board/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().permitAll()
                 ;
 
         return httpSecurity.build();
     }
+
+    @Bean
+    public LoginFailHandler loginFailHandler() {return new LoginFailHandler();}
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();}
 
 }

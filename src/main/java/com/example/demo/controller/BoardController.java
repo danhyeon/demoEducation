@@ -1,10 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.BoardDto;
+import com.example.demo.dto.MemberDto;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +24,7 @@ import javax.validation.Valid;
 public class BoardController {
 
     private final BoardService boardService;
+    private final MemberService memberService;
 
     @GetMapping(value = "/info")
     public String boardInfo(Model model) {
@@ -35,17 +39,23 @@ public class BoardController {
     }
 
     @PostMapping(value = "/form")
-    public String boardSave(@Valid BoardDto boardDto, BindingResult bindingResult, Model model) {
+    public String boardSave(@Valid BoardDto boardDto, BindingResult bindingResult, Model model, Authentication authentication) {
         if(bindingResult.hasErrors()) {
             return "/pages/boards/boardForm";
         }
-        boardService.saveBoard(boardDto);
+        boardService.saveBoard(boardDto, authentication.getName());
         return "redirect:/board/info";
     }
 
     @GetMapping(value = "/detail/{boardId}")
-    public String boardDetail(@PathVariable Long boardId, Model model) {
+    public String boardDetail(@PathVariable Long boardId, Model model, Authentication authentication) {
         BoardDto boardDto = boardService.showDetail(boardId);
+        String writerEmail = boardDto.getMemberEmail();
+        if(writerEmail.equals(authentication.getName())) {
+            model.addAttribute("mine", true);
+        }else{
+            model.addAttribute("mine", false);
+        }
         model.addAttribute("boardDto", boardDto);
         model.addAttribute("bid", boardDto.getId());
         return "/pages/boards/boardDetail";

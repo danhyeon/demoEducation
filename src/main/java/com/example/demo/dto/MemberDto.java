@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 @ToString
 @NoArgsConstructor
 public class MemberDto {
-    private Long id;
     private String name;
     private String email;
     private String password;

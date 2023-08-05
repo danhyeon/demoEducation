@@ -76,12 +76,12 @@
       <div class="card card-default">
         <div class="card-header">
           <h4 class="card-title">상세 내용</h4>
-          <div class="btn-group float-right">
-            <button type="button" class="btn btn-primary btn-sm" onclick="location.href='/board/info'">목록</button>
-            <button type="button" id="saveBtn" th:data-id="${bid}" class="btn btn-primary btn-sm" style="display: none;" onclick="saveBoard(this)">저장</button>
+          <div class="btn-group float-right" th:if="${mine}">
             <button type="button" id="updateBtn" class="btn btn-primary btn-sm" onclick="updateInit()">수정</button>
+            <button type="button" id="saveBtn" th:data-id="${bid}" class="btn btn-primary btn-sm" style="display: none;" onclick="saveBoard(this)">저장</button>
             <button type="button" th:data-id="${bid}" class="btn btn-primary btn-sm" onclick="deleteBoard(this)">삭제</button>
           </div>
+          <button type="button" class="btn btn-secondary btn-sm float-right mr-1" onclick="location.href='/board/info'">목록</button>
         </div>
         <div class="card-body">
           <div class="container-fluid">
