@@ -10,10 +10,11 @@ spring:
   jpa:
     properties:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+      hibernate:
+        show_sql: true
+        format_sql: true
     hibernate:
-      ddl_auto: create
-      show_sql: true
-      format_sql: true
+      ddl_auto: update
 
   mvc:
     static-path-pattern: /**

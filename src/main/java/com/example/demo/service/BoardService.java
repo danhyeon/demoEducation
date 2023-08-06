@@ -8,6 +8,9 @@ import com.example.demo.repository.MemberRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import javax.transaction.Transactional;
@@ -28,13 +31,13 @@ public class BoardService {
         return boardRepository.save(Board.createBoard(boardDto, member));
     }
 
-    public List<BoardDto> getBoardList() {
+    public Page<Board> getBoardList(Pageable pageable) {
         List<BoardDto> boardDtos = new ArrayList<>();
 
-        for(Board board : boardRepository.findAll()) {
-            boardDtos.add(BoardDto.of(board));
-        }
-        return boardDtos;
+//        for(Board board : boardRepository.findAll(pageable)) {
+//            boardDtos.add(BoardDto.of(board));
+//        }
+        return boardRepository.findAll(pageable);
     }
 
     public BoardDto showDetail(Long boardId) {
