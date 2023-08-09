@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,6 +20,9 @@ public class BoardDto {
     @NotBlank(message = "내용은 필수 입력입니다.")
     private String content;
     private String writer;
+    private String memberEmail;
+    private LocalDateTime regTime;
+    private LocalDateTime updateTime;
 
     private static ModelMapper modelmapper = new ModelMapper();
 

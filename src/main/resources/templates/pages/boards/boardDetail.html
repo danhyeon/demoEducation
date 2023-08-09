@@ -93,6 +93,28 @@
               <label>내용</label>
               <textarea class="form-control" id="content" th:text="${boardDto.content}" rows="10" disabled></textarea>
             </div>
+            <strong class="mr-2" style="display: inline">최근 수정일</strong>
+            <p style="display: inline; color: gray;" th:text="${boardDto.updateTime}"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="content">
+      <div class="card card-default">
+        <div class="card-header">
+          <h4 class="card-title">댓글</h4>
+        </div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <form action="/reply/new" method="post">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="hidden" th:value="${boardDto.id}" name="boardId">
+                  <textarea class="form-control" name="reply" id="reply" rows="2"></textarea>
+                  <button class="btn btn-primary btn-lg" type="submit">작성</button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

@@ -51,6 +51,7 @@
                 <th scope="col">no</th>
                 <th scope="col">제목</th>
                 <th scope="col">작성자</th>
+                <th scope="col">작성일</th>
               </tr>
               </thead>
               <tbody>
@@ -58,15 +59,9 @@
                 <th scope="row" th:text="${board.id}"></th>
                 <td th:text="${board.title}"></td>
                 <td th:text="${board.writer}"></td>
+                <td th:text="${board.regTime}"></td>
               </tr>
               </tbody>
-              <tfoot>
-              <tr>
-                <th scope="col">no</th>
-                <th scope="col">제목</th>
-                <th scope="col">작성자</th>
-              </tr>
-              </tfoot>
             </table>
           </div>
         </div>
