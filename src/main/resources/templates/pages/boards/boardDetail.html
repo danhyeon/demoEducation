@@ -6,6 +6,8 @@
       layout:decorate="~{layouts/layout_common}">
 
 <th:block layout:fragment="script">
+  <!-- SweetAlert2 -->
+  <script src="/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script th:inline="javascript">
     function deleteBoard(obj) {
       let id = obj.dataset.id;
@@ -47,10 +49,59 @@
       $('#updateBtn').css('display', 'none');
       $('#saveBtn').css('display', 'block');
     }
+
+    function deleteReply(obj) {
+      let id = obj.dataset.id;
+      let url = "/reply/delete/" + id;
+      $.ajax({
+        url: url,
+        type: 'GET',
+        success: function () {
+          location.replace(location.href);
+        }
+      });
+    }
+
+    function showModal(obj) {
+      let id = obj.dataset.id;
+      $('#rid').val(id);
+      let url = "/reply/info/" + id
+      $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/text',
+        success: function(data){
+          $('div.modal').modal();
+          $('#modalContent').text(data);
+        }
+      })
+    }
+
+    function updateReply() {
+      let id = $('#rid').val();
+      let url = "/reply/update/" + id;
+      let data = $('#modalContent').val();
+      $.ajax({
+        url: url,
+        type: 'PATCH',
+        data: data,
+        dataType: 'html',
+        contentType: 'application/text',
+        success: function (data) {
+          let replyCard = $('#replyCard');
+          $('div.modal').modal('hide');
+          replyCard.children().remove();
+          replyCard.append(data);
+        },
+      });
+    }
+
   </script>
 </th:block>
 
 <th:block layout:fragment="css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   <style th:inline="css">
   </style>
 </th:block>
@@ -115,16 +166,58 @@
               <hr />
             </div>
           </form>
-          <div class="list-group" th:each="reply : ${replies}">
-            <div class="comment">
-              <strong th:text="${reply.writer}">r</strong>
-              <p th:text="${reply.content}"></p>
-              <p th:text="${reply.updateTime}"></p>
-              <hr />
+          <div id="replyCard">
+            <div class="list-group" th:each="reply : ${replies}">
+              <div class="row border-bottom">
+                <div class="col">
+                  <div class="comment">
+                    <strong th:text="${reply.writer}"></strong>
+                    <p th:text="${reply.content}"></p>
+                  </div>
+                </div>
+                <div class="col float-right">
+                  <div class="container-fluid">
+                    <div class="list-group float-right">
+                      <div class="float-right">
+                        <p th:text="${reply.updateTime}"></p>
+                      </div>
+                      <div class="float-right">
+                        <a class="float-right" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
+                        <a class="float-right mr-2" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">댓글 수정</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="hidden" id="rid" name="replyId">
+                <textarea id="modalContent" class="form-control" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary btnSave" onclick="updateReply()">저장</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
     </section>
   </div>
 </th:block>

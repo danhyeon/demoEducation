@@ -47,4 +47,21 @@ public class ReplyService {
         }
         return replyDtos;
     }
+
+    public void deleteReply(Long replyId) {
+        replyRepository.deleteById(replyId);
+    }
+
+    public String getContent(Long replyId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(EntityExistsException::new);
+        return reply.getContent();
+    }
+
+    public Long updateReply(Long replyId, String content) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(EntityExistsException::new);
+        reply.updateReply(content);
+        return reply.getBoard().getId();
+    }
 }

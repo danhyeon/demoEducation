@@ -1,0 +1,23 @@
+<div class="list-group" th:each="reply : ${replies}">
+  <div class="row border-bottom">
+    <div class="col">
+      <div class="comment">
+        <strong th:text="${reply.writer}"></strong>
+        <p th:text="${reply.content}"></p>
+      </div>
+    </div>
+    <div class="col float-right">
+      <div class="container-fluid">
+        <div class="list-group float-right">
+          <div class="float-right">
+            <p th:text="${reply.updateTime}"></p>
+          </div>
+          <div class="float-right">
+            <a class="float-right" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
+            <a class="float-right mr-2" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

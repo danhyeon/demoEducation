@@ -49,7 +49,7 @@ public class Reply extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateReply(ReplyDto replyDto) {
-        this.content = replyDto.getContent();
+    public void updateReply(String content) {
+        this.content = content;
     }
 }
