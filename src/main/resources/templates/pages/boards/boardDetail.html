@@ -55,7 +55,7 @@
       let url = "/reply/delete/" + id;
       $.ajax({
         url: url,
-        type: 'GET',
+        type: 'DELETE',
         success: function () {
           location.replace(location.href);
         }
@@ -96,6 +96,51 @@
       });
     }
 
+    function showDupForm(obj) {
+      let id = obj.dataset.id;
+      let dupForm = "<form action=\"/dupReply/new\" method=\"post\" id=\"dupForm\">\n" +
+              "       <div class=\"form-group\">\n" +
+              "        <div class=\"input-group\">\n" +
+              "         <input type=\"hidden\" name=\"replyId\" id=\"replyId\">\n" +
+              "         <textarea class=\"form-control\" id=\"dupReply\" name=\"dupReply\" rows=\"2\"></textarea>\n" +
+              "         <button class=\"btn btn-primary btn-lg\" type=\"submit\">작성</button>\n" +
+              "        </div>\n" +
+              "       </div>\n" +
+              "      </form>";
+      $(obj).closest('.list-group').append(dupForm);
+      $('#replyId').val(id);
+    }
+
+    function deleteDupReply(obj) {
+      let id = obj.dataset.id;
+      let url = "/dupReply/delete/" + id;
+      $.ajax({
+        url: url,
+        type: 'DELETE',
+        success: function () {
+          location.replace(location.href);
+        }
+      });
+    }
+
+    function dupUpdateForm(obj) {
+      let id = obj.dataset.id;
+      let updateForm = "<form action=\"/dupReply/update\" method=\"post\" id=\"dupUpdateForm\">\n" +
+              "       <div class=\"form-group\">\n" +
+              "        <div class=\"input-group\">\n" +
+              "         <input type=\"hidden\" name=\"dupReplyId\" id=\"dupReplyId\">\n" +
+              "         <textarea class=\"form-control\" id=\"dupReply\" name=\"dupReply\" rows=\"2\"></textarea>\n" +
+              "         <button class=\"btn btn-primary btn-lg\" type=\"submit\">작성</button>\n" +
+              "        </div>\n" +
+              "       </div>\n" +
+              "      </form>";
+      let content = $(obj).closest('.comment').children().last().text();
+      $(obj).closest('.comment').children().last().remove();
+      $(obj).closest('.comment').append(updateForm);
+      $('#dupReplyId').val(id);
+      $('#dupReply').text(content);
+    }
+
   </script>
 </th:block>
 
@@ -127,7 +172,7 @@
       <div class="card card-default">
         <div class="card-header">
           <h4 class="card-title">상세 내용</h4>
-          <div class="btn-group float-right" th:if="${mine}">
+          <div class="btn-group float-right" th:if="${#strings.equals(boardDto.memberEmail, userEmail)}">
             <button type="button" id="updateBtn" class="btn btn-primary btn-sm" onclick="updateInit()">수정</button>
             <button type="button" id="saveBtn" th:data-id="${bid}" class="btn btn-primary btn-sm" style="display: none;" onclick="saveBoard(this)">저장</button>
             <button type="button" th:data-id="${bid}" class="btn btn-primary btn-sm" onclick="deleteBoard(this)">삭제</button>
@@ -167,25 +212,37 @@
             </div>
           </form>
           <div id="replyCard">
-            <div class="list-group" th:each="reply : ${replies}">
-              <div class="row border-bottom">
-                <div class="col">
-                  <div class="comment">
-                    <strong th:text="${reply.writer}"></strong>
-                    <p th:text="${reply.content}"></p>
+            <div class="list-group ml-2 mr-2" th:each="reply : ${replies}">
+              <div>
+                <div class="row border-bottom mb-2">
+                  <div class="col">
+                    <div class="comment">
+                      <div class="d-flex flex-low align-items-center">
+                        <strong th:text="${reply.writer}"></strong>
+                        <p class="small m-0 ml-2" style="color: grey;" th:text="${reply.updateTime}"></p>
+                        <div th:if="${#strings.equals(reply.memberEmail, userEmail)}">
+                          <a class="ml-1" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
+                          <a class="ml-0" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
+                        </div>
+                          <a class="ml-1" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
+                      </div>
+                      <p th:text="${reply.content}"></p>
+                    </div>
                   </div>
                 </div>
-                <div class="col float-right">
-                  <div class="container-fluid">
-                    <div class="list-group float-right">
-                      <div class="float-right">
-                        <p th:text="${reply.updateTime}"></p>
-                      </div>
-                      <div class="float-right">
-                        <a class="float-right" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
-                        <a class="float-right mr-2" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
+              </div>
+              <div class="row mb-2 border-bottom" style="margin-left: 40px;" th:each="dupReply : ${reply.dupReplyDtoList}">
+                <div class="col">
+                  <div class="comment">
+                    <div class="d-flex flex-low align-items-center">
+                      <strong th:text="${dupReply.writer}">작성자</strong>
+                      <p class="small m-0 ml-2" style="color: grey;" th:text="${dupReply.updateTime}">시간</p>
+                      <div th:if="${#strings.equals(dupReply.memberEmail, userEmail)}">
+                        <a class="ml-1" th:data-id="${dupReply.id}" onclick="deleteDupReply(this)">삭제</a>
+                        <a class="ml-1" th:data-id="${dupReply.id}" onclick="dupUpdateForm(this)">수정</a>
                       </div>
                     </div>
+                    <p th:text="${dupReply.content}">테스트 내용</p>
                   </div>
                 </div>
               </div>

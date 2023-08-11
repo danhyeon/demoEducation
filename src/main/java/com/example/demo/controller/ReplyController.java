@@ -26,7 +26,7 @@ public class ReplyController {
         return "redirect:/board/detail/" + boardId;
     }
 
-    @GetMapping(value = "/delete/{replyId}")
+    @DeleteMapping(value = "/delete/{replyId}")
     public ResponseEntity<Long> deleteReply(@PathVariable Long replyId) {
         replyService.deleteReply(replyId);
         return new ResponseEntity<Long>(replyId, HttpStatus.OK);

@@ -64,4 +64,9 @@ public class ReplyService {
         reply.updateReply(content);
         return reply.getBoard().getId();
     }
+
+    public ReplyDto getReplyDto(Long replyId) {
+        return ReplyDto.of(replyRepository.findById(replyId)
+                .orElseThrow(EntityExistsException::new));
+    }
 }

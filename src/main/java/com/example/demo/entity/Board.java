@@ -28,7 +28,7 @@ public class Board extends BaseTimeEntity {
     private String writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_email", unique = true)
+    @JoinColumn(name = "member_email")
     private Member member;
 
     @Builder

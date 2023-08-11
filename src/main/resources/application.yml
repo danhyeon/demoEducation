@@ -14,7 +14,7 @@ spring:
         show_sql: true
         format_sql: true
     hibernate:
-      ddl_auto: update
+      ddl_auto: create
 
   mvc:
     static-path-pattern: /**
