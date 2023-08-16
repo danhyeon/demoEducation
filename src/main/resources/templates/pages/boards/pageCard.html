@@ -1,0 +1,6 @@
+<tr th:each="board : ${page.content}" onclick="showDetail(this)">
+  <th scope="row" th:text="${board.id}"></th>
+  <td th:text="${board.title}"></td>
+  <td th:text="${board.writer}"></td>
+  <td th:text="${board.regTime}"></td>
+</tr>

@@ -107,7 +107,7 @@
       <div class="card card-default">
         <div class="card-header">
           <h4 class="card-title">상세 내용</h4>
-          <div class="btn-group float-right" th:if="${mine}">
+          <div class="btn-group float-right" th:if="${#strings.equals(boardDto.memberEmail, userEmail)}">
             <button type="button" id="updateBtn" class="btn btn-primary btn-sm" onclick="updateInit()">수정</button>
             <button type="button" id="saveBtn" th:data-id="${boardDto.id}" class="btn btn-primary btn-sm" style="display: none;" onclick="saveBoard(this)">저장</button>
             <button type="button" th:data-id="${boardDto.id}" class="btn btn-primary btn-sm" onclick="deleteBoard(this)">삭제</button>
