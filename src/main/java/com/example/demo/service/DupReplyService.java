@@ -38,9 +38,7 @@ public class DupReplyService {
         return reply.getBoard().getId();
     }
 
-    public List<DupReplyDto> getDupReplys(Long replyId) {
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(EntityExistsException::new);
+    public List<DupReplyDto> getDupReplys(Reply reply) {
         List<DupReplyDto> result = new ArrayList<>();
         for(DupReply dupReply : dupReplyRepository.findByReply(reply)) {
             result.add(DupReplyDto.of(dupReply));
@@ -48,8 +46,11 @@ public class DupReplyService {
         return result;
     }
 
-    public void deleteDupReply(Long dupReplyId) {
-        dupReplyRepository.deleteById(dupReplyId);
+    public Long deleteDupReply(Long dupReplyId) {
+        DupReply dupReply = dupReplyRepository.findById(dupReplyId)
+                .orElseThrow(EntityExistsException::new);
+        dupReplyRepository.delete(dupReply);
+        return dupReply.getReply().getBoard().getId();
     }
 
     public Long updateDupReply(Long dupReplyId, String content) {

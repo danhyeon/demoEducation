@@ -7,13 +7,29 @@
             <strong th:text="${reply.writer}"></strong>
             <p class="small m-0 ml-2" style="color: gray" th:text="${reply.updateTime}"></p>
             <div th:if="${#strings.equals(userEmail, reply.memberEmail)}">
-              <a class="ml-1" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
-              <a class="ml-0" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
+              <a class="ml-2" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
+              <a class="ml-1" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
             </div>
-            <a class="ml-1" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
+            <a class="ml-2 showBtn" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
+            <a class="ml-2 closeBtn" style="display:none; color: red;" onclick="closeDupForm(this)">취소</a>
           </div>
           <p th:text="${reply.content}"></p>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2 border-bottom" style="margin-left: 40px;" th:each="dupReply : ${reply.dupReplyDtoList}">
+    <div class="col">
+      <div class="comment">
+        <div class="d-flex flex-low align-items-center">
+          <strong th:text="${dupReply.writer}"></strong>
+          <p class="small m-0 ml-2" style="color: gray;" th:text="${dupReply.updateTime}"></p>
+          <div th:if="${#strings.equals(dupReply.memberEmail, userEmail)}">
+            <a class="ml-2" th:data-id="${dupReply.id}" onclick="deleteDupReply(this)">삭제</a>
+            <a class="ml-1" th:data-id="${dupReply.id}" onclick="updateDupReply(this)">수정</a>
+          </div>
+        </div>
+        <p th:text="${dupReply.content}"></p>
       </div>
     </div>
   </div>

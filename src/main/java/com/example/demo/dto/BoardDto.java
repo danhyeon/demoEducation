@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -21,13 +22,16 @@ public class BoardDto {
     private String content;
     private String writer;
     private String memberEmail;
-    private LocalDateTime regTime;
-    private LocalDateTime updateTime;
+    private String regTime;
+    private String updateTime;
 
     private static ModelMapper modelmapper = new ModelMapper();
 
     public static BoardDto of(Board board) {
-        return modelmapper.map(board, BoardDto.class);
+        BoardDto boardDto = modelmapper.map(board, BoardDto.class);
+        boardDto.setRegTime(board.getRegTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")));
+        boardDto.setUpdateTime(board.getUpdateTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")));
+        return boardDto;
     }
 
 }

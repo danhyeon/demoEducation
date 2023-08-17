@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.BoardDto;
+import com.example.demo.dto.DupReplyDto;
 import com.example.demo.dto.ReplyDto;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.DupReplyService;
@@ -29,7 +30,6 @@ public class BoardController {
 
     private final BoardService boardService;
     private final ReplyService replyService;
-    private final DupReplyService dupReplyService;
 
     @GetMapping(value = "/info")
     public String boardInfo(@RequestParam(value = "page", required = false, defaultValue = "0") String page,
@@ -53,36 +53,26 @@ public class BoardController {
     }
 
     @PostMapping(value = "/form")
-    public String boardSave(@Valid BoardDto boardDto,
-                            BindingResult bindingResult,
-                            Authentication authentication,
-                            Model model) {
-        String email = authentication.getName();
-        if(bindingResult.hasErrors()) {
-            return "/pages/boards/boardForm";
-        }
-        boardService.saveBoard(boardDto, email);
+    public String boardSave(@Valid BoardDto boardDto, BindingResult bindingResult,
+                            Authentication authentication) {
+        if(bindingResult.hasErrors()) {return "/pages/boards/boardForm";}
+        boardService.saveBoard(boardDto, authentication.getName());
         return "redirect:/board/info";
     }
 
     @GetMapping(value = "/detail/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, Authentication authentication) {
-        String userEmail = authentication.getName();
-        BoardDto boardDto = boardService.showDetail(boardId);
-        List<ReplyDto> replyDtoList = replyService.getReplyList(boardId);
-        for(ReplyDto r : replyDtoList) {
-            r.setDupReplyDtoList(dupReplyService.getDupReplys(r.getId()));
-        }
-        model.addAttribute("userEmail", userEmail);
-        model.addAttribute("boardDto", boardDto);
-        model.addAttribute("replies", replyDtoList);
+        model.addAttribute("userEmail", authentication.getName());
+        model.addAttribute("boardDto", boardService.showDetail(boardId));
+        model.addAttribute("replies", replyService.getReplyList(boardId));
         return "/pages/boards/boardDetail";
     }
 
     @PatchMapping(value = "/update")
-    public ResponseEntity boardUpdate(@RequestBody BoardDto boardDto) {
+    public String boardUpdate(@RequestBody BoardDto boardDto, Model model) {
         boardService.updateBoard(boardDto);
-        return new ResponseEntity<Long>(boardDto.getId(), HttpStatus.OK);
+        model.addAttribute("boardDto", boardService.showDetail(boardDto.getId()));
+        return "/pages/boards/detailCard";
     }
 
     @DeleteMapping(value = "/delete/{boardId}")

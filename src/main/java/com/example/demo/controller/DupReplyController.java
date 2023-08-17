@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.DupReplyService;
+import com.example.demo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class DupReplyController {
 
     private final DupReplyService dupReplyService;
+    private final ReplyService replyService;
 
     @PostMapping(value = "/new")
     public String createDupReply(@RequestParam Long replyId,
@@ -25,9 +28,11 @@ public class DupReplyController {
     }
 
     @DeleteMapping(value = "/delete/{dupReplyId}")
-    public ResponseEntity<Long> deleteDupReply(@PathVariable Long dupReplyId) {
-        dupReplyService.deleteDupReply(dupReplyId);
-        return new ResponseEntity<Long>(dupReplyId, HttpStatus.OK);
+    public String deleteDupReply(@PathVariable Long dupReplyId, Model model, Authentication authentication) {
+        Long boardId = dupReplyService.deleteDupReply(dupReplyId);
+        model.addAttribute("replies",replyService.getReplyList(boardId));
+        model.addAttribute("userEmail",authentication.getName());
+        return "/pages/boards/replyCard";
     }
 
     @PostMapping(value = "/update")
