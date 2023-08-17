@@ -31,6 +31,14 @@
       $('#dupForm').remove();
     }
 
+    function showModal(obj) {
+      let id = obj.dataset.id;
+      let content = $(obj).closest('.comment').children().last().text();
+      $('#rid').val(id);
+      $('#modalContent').val(content);
+      $('div.modal').modal();
+    }
+
     function deleteBoard(obj) {
       let id = obj.dataset.id;
       let url = "/board/delete/" + id;
@@ -76,20 +84,6 @@
         success: function (data) {
           refreshReplyCard(data)
         },
-      })
-    }
-
-    function showModal(obj) {
-      let id = obj.dataset.id;
-      $('#rid').val(id);
-      let url = "/reply/modal/" + id;
-      $.ajax({
-        url: url,
-        type: 'POST',
-        success: function(data) {
-          $('#modalContent').text(data);
-          $('div.modal').modal();
-        }
       })
     }
 
@@ -158,6 +152,16 @@
       $(obj).closest('.comment').append(updateForm);
       $('#dupReplyId').val(id);
       $('#dupReply').text(content);
+      $(obj).css('display','none');
+      $(obj).next().css('display','inline');
+    }
+
+    function cancelDupReply(obj) {
+      let content = $('#dupReply').text();
+      $(obj).closest('.comment').children().last().remove();
+      $(obj).closest('.comment').append("<p>"+content+"</p>");
+      $(obj).css('display','none');
+      $(obj).prev().css('display','inline');
     }
 
   </script>
@@ -259,6 +263,7 @@
                         <div th:if="${#strings.equals(dupReply.memberEmail, userEmail)}">
                           <a class="ml-2" th:data-id="${dupReply.id}" onclick="deleteDupReply(this)">삭제</a>
                           <a class="ml-1" th:data-id="${dupReply.id}" onclick="updateDupReply(this)">수정</a>
+                          <a class="ml-1" style="display: none; color: red;" onclick="cancelDupReply(this)">취소</a>
                         </div>
                       </div>
                       <p th:text="${dupReply.content}"></p>

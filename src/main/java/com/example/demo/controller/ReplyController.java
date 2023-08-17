@@ -35,12 +35,6 @@ public class ReplyController {
         return "/pages/boards/replyCard";
     }
 
-    @ResponseBody
-    @PostMapping(value = "/modal/{replyId}")
-    public String modalReply(@PathVariable Long replyId){
-        return replyService.getContent(replyId);
-    }
-
     @PatchMapping(value = "/update/{replyId}")
     public String updateReply(@PathVariable Long replyId, @RequestBody String content,
                               Authentication authentication, Model model){
