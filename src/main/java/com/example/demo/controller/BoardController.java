@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.BoardDto;
 import com.example.demo.dto.ReplyDto;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.DupReplyService;
 import com.example.demo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/board")
@@ -27,6 +29,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final ReplyService replyService;
+    private final DupReplyService dupReplyService;
 
     @GetMapping(value = "/info")
     public String boardInfo(@RequestParam(value = "page", required = false, defaultValue = "0") String page,
@@ -66,9 +69,13 @@ public class BoardController {
     public String boardDetail(@PathVariable Long boardId, Model model, Authentication authentication) {
         String userEmail = authentication.getName();
         BoardDto boardDto = boardService.showDetail(boardId);
+        List<ReplyDto> replyDtoList = replyService.getReplyList(boardId);
+        for(ReplyDto r : replyDtoList) {
+            r.setDupReplyDtoList(dupReplyService.getDupReplys(r.getId()));
+        }
         model.addAttribute("userEmail", userEmail);
         model.addAttribute("boardDto", boardDto);
-        model.addAttribute("replies", replyService.getReplyList(boardId));
+        model.addAttribute("replies", replyDtoList);
         return "/pages/boards/boardDetail";
     }
 

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -34,5 +35,16 @@ public class ReplyController {
     @PostMapping(value = "/modal/{replyId}")
     public String modalReply(@PathVariable Long replyId){
         return replyService.getContent(replyId);
+    }
+
+    @PatchMapping(value = "/update/{replyId}")
+    public String updateReply(@PathVariable Long replyId,
+                              @RequestBody String content,
+                              Authentication authentication,
+                              Model model){
+        Long boardId = replyService.updateReply(replyId, content);
+        model.addAttribute("replies",replyService.getReplyList(boardId));
+        model.addAttribute("userEmail", authentication.getName());
+        return "pages/boards/replyCard";
     }
 }
