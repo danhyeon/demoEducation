@@ -1,6 +1,6 @@
-<tr th:each="board : ${page.content}" onclick="showDetail(this)">
+<tr th:each="board : ${page.content}" th:onclick="|location.href='@{/board/detail(page=${page.number},boardId=${board.id})}'|">
   <th scope="row" th:text="${board.id}"></th>
   <td th:text="${board.title}"></td>
   <td th:text="${board.writer}"></td>
-  <td th:text="${board.regTime}"></td>
+  <td th:text="${#strings.setSplit(board.regTime,'T')[0]}"></td>
 </tr>

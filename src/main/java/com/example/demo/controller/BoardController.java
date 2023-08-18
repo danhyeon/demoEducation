@@ -9,6 +9,7 @@ import com.example.demo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,14 +35,14 @@ public class BoardController {
     @GetMapping(value = "/info")
     public String boardInfo(@RequestParam(value = "page", required = false, defaultValue = "0") String page,
                             Model model) {
-        Pageable pageable = PageRequest.of(Integer.parseInt(page), 5);
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 5, Sort.by("regTime").descending());
         model.addAttribute("page", boardService.getBoardList(pageable));
         return "/pages/boards/boardInfo";
     }
 
     @PostMapping(value = "/info/{page}")
     public String boardPages(@PathVariable Integer page, Model model) {
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page, 5, Sort.by("regTime").descending());
         model.addAttribute("page", boardService.getBoardList(pageable));
         return "/pages/boards/pageCard";
     }
@@ -60,8 +61,11 @@ public class BoardController {
         return "redirect:/board/info";
     }
 
-    @GetMapping(value = "/detail/{boardId}")
-    public String boardDetail(@PathVariable Long boardId, Model model, Authentication authentication) {
+    @GetMapping(value = "/detail")
+    public String boardDetail(@RequestParam Long boardId,
+                              @RequestParam(required = false, defaultValue = "0") Long page,
+                              Model model, Authentication authentication) {
+        model.addAttribute("pageNum", page);
         model.addAttribute("userEmail", authentication.getName());
         model.addAttribute("boardDto", boardService.showDetail(boardId));
         model.addAttribute("replies", replyService.getReplyList(boardId));

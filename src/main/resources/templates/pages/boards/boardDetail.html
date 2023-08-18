@@ -204,7 +204,7 @@
             <button type="button" id="saveBtn" th:data-id="${boardDto.id}" class="btn btn-primary btn-sm" style="display: none;" onclick="saveBoard(this)">저장</button>
             <button type="button" th:data-id="${boardDto.id}" class="btn btn-primary btn-sm" onclick="deleteBoard(this)">삭제</button>
           </div>
-          <button type="button" class="btn btn-primary btn-sm float-right mr-1" onclick="location.href='/board/info'">목록</button>
+          <a type="button" class="btn btn-primary btn-sm float-right mr-1" th:href="@{/board/info(page=${pageNum})}">목록</a>
         </div>
         <div class="card-body" id="boardCard">
           <div class="container-fluid">
