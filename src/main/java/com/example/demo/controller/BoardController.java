@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.BoardDto;
-import com.example.demo.dto.DupReplyDto;
-import com.example.demo.dto.ReplyDto;
 import com.example.demo.service.BoardService;
-import com.example.demo.service.DupReplyService;
 import com.example.demo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/board")
@@ -44,7 +40,7 @@ public class BoardController {
     public String boardPages(@PathVariable Integer page, Model model) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by("regTime").descending());
         model.addAttribute("page", boardService.getBoardList(pageable));
-        return "/pages/boards/pageCard";
+        return "/pages/cards/board/pageCard";
     }
 
     @GetMapping(value = "/form")
@@ -76,7 +72,7 @@ public class BoardController {
     public String boardUpdate(@RequestBody BoardDto boardDto, Model model) {
         boardService.updateBoard(boardDto);
         model.addAttribute("boardDto", boardService.showDetail(boardDto.getId()));
-        return "/pages/boards/detailCard";
+        return "/pages/cards/board/detailCard";
     }
 
     @DeleteMapping(value = "/delete/{boardId}")

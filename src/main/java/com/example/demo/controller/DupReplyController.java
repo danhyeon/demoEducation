@@ -3,8 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.service.DupReplyService;
 import com.example.demo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +19,11 @@ public class DupReplyController {
     @PostMapping(value = "/new")
     public String createDupReply(@RequestParam Long replyId,
                                  @RequestParam String dupReply,
+                                 @RequestParam Long page,
                                  Authentication authentication) {
         Long boardId =
                 dupReplyService.saveDupReply(replyId, dupReply, authentication.getName());
-        return "redirect:/board/detail/" + boardId;
+        return "redirect:/board/detail?page="+page+"&boardId="+boardId;
     }
 
     @DeleteMapping(value = "/delete/{dupReplyId}")
@@ -32,13 +31,14 @@ public class DupReplyController {
         Long boardId = dupReplyService.deleteDupReply(dupReplyId);
         model.addAttribute("replies",replyService.getReplyList(boardId));
         model.addAttribute("userEmail",authentication.getName());
-        return "/pages/boards/replyCard";
+        return "/pages/cards/board/replyCard";
     }
 
     @PostMapping(value = "/update")
     public String updateDupReply(@RequestParam Long dupReplyId,
-                                 @RequestParam String dupReply) {
+                                 @RequestParam String dupReply,
+                                 @RequestParam Long page) {
         Long boardId = dupReplyService.updateDupReply(dupReplyId, dupReply);
-        return "redirect:/board/detail/" + boardId;
+        return "redirect:/board/detail?page="+page+"&boardId="+boardId;
     }
 }
