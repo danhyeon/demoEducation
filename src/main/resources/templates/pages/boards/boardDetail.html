@@ -39,6 +39,14 @@
       $('div.modal').modal();
     }
 
+    function cancelDupReply(obj) {
+      let content = $('#dupReply').text();
+      $(obj).closest('.comment').children().last().remove();
+      $(obj).closest('.comment').append("<p>"+content+"</p>");
+      $(obj).css('display','none');
+      $(obj).prev().css('display','inline');
+    }
+
     function deleteBoard(obj) {
       let id = obj.dataset.id;
       let url = "/board/delete/" + id;
@@ -106,10 +114,10 @@
 
     function showDupForm(obj) {
       let id = obj.dataset.id;
-      $('.closeBtn').css('display','none');
-      $('.showBtn').css('display','block');
+      $('.dupCBtn').css('display','none');
+      $('.dupSBtn').css('display','inline');
       $(obj).css('display','none');
-      $(obj).next().css('display','block');
+      $(obj).next().css('display','inline');
       $('#dupForm').remove();
       let dupForm = "<form action=\"/dupReply/new\" method=\"post\" id=\"dupForm\">\n" +
               "       <div class=\"form-group\">\n" +
@@ -138,6 +146,12 @@
     }
     function updateDupReply(obj) {
       let id = obj.dataset.id;
+      let dupUpdateForm = $('#dupUpdateForm');
+      let prevContent = $('#dupReply').val();
+      dupUpdateForm.parent().append('<p>'+prevContent+'</p>');
+      dupUpdateForm.remove();
+      $('.dupUCBtn').css('display','none');
+      $('.dupUSBtn').css('display','inline');
       let updateForm = "<form action=\"/dupReply/update\" method=\"post\" id=\"dupUpdateForm\">\n" +
               "       <div class=\"form-group\">\n" +
               "        <div class=\"input-group\">\n" +
@@ -154,14 +168,6 @@
       $('#dupReply').text(content);
       $(obj).css('display','none');
       $(obj).next().css('display','inline');
-    }
-
-    function cancelDupReply(obj) {
-      let content = $('#dupReply').text();
-      $(obj).closest('.comment').children().last().remove();
-      $(obj).closest('.comment').append("<p>"+content+"</p>");
-      $(obj).css('display','none');
-      $(obj).prev().css('display','inline');
     }
 
   </script>
@@ -246,8 +252,8 @@
                             <a class="ml-2" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
                             <a class="ml-1" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
                           </div>
-                          <a class="ml-2 showBtn" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
-                          <a class="ml-2 closeBtn" style="display:none; color: red;" onclick="closeDupForm(this)">취소</a>
+                          <a class="ml-2 dupSBtn" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
+                          <a class="ml-2 dupCBtn" style="display:none; color: red;" onclick="closeDupForm(this)">취소</a>
                         </div>
                         <p th:text="${reply.content}"></p>
                       </div>
@@ -262,8 +268,8 @@
                         <p class="small m-0 ml-2" style="color: gray;" th:text="${dupReply.updateTime}"></p>
                         <div th:if="${#strings.equals(dupReply.memberEmail, userEmail)}">
                           <a class="ml-2" th:data-id="${dupReply.id}" onclick="deleteDupReply(this)">삭제</a>
-                          <a class="ml-1" th:data-id="${dupReply.id}" onclick="updateDupReply(this)">수정</a>
-                          <a class="ml-1" style="display: none; color: red;" onclick="cancelDupReply(this)">취소</a>
+                          <a class="ml-1 dupUSBtn" th:data-id="${dupReply.id}" onclick="updateDupReply(this)">수정</a>
+                          <a class="ml-1 dupUCBtn" style="display: none; color: red;" onclick="cancelDupReply(this)">취소</a>
                         </div>
                       </div>
                       <p th:text="${dupReply.content}"></p>

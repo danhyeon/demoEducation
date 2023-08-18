@@ -10,8 +10,8 @@
               <a class="ml-2" th:data-id="${reply.id}" onclick="deleteReply(this)">삭제</a>
               <a class="ml-1" th:data-id="${reply.id}" onclick="showModal(this)">수정</a>
             </div>
-            <a class="ml-2 showBtn" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
-            <a class="ml-2 closeBtn" style="display:none; color: red;" onclick="closeDupForm(this)">취소</a>
+            <a class="ml-2 dupSBtn" th:data-id="${reply.id}" onclick="showDupForm(this)">답글</a>
+            <a class="ml-2 dupCBtn" style="display:none; color: red;" onclick="closeDupForm(this)">취소</a>
           </div>
           <p th:text="${reply.content}"></p>
         </div>
@@ -26,7 +26,8 @@
           <p class="small m-0 ml-2" style="color: gray;" th:text="${dupReply.updateTime}"></p>
           <div th:if="${#strings.equals(dupReply.memberEmail, userEmail)}">
             <a class="ml-2" th:data-id="${dupReply.id}" onclick="deleteDupReply(this)">삭제</a>
-            <a class="ml-1" th:data-id="${dupReply.id}" onclick="updateDupReply(this)">수정</a>
+            <a class="ml-1 dupUSBtn" th:data-id="${dupReply.id}" onclick="updateDupReply(this)">수정</a>
+            <a class="ml-1 dupUCBtn" style="display: none; color: red;" onclick="cancelDupReply(this)">취소</a>
           </div>
         </div>
         <p th:text="${dupReply.content}"></p>
