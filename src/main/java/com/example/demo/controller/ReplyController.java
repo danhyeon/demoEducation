@@ -27,7 +27,7 @@ public class ReplyController {
         Long boardId = replyService.deleteReply(replyId);
         model.addAttribute("replies",replyService.getReplyList(boardId));
         model.addAttribute("userEmail",authentication.getName());
-        return "/pages/cards/board/replyCard";
+        return "pages/cards/board/replyCard";
     }
 
     @PatchMapping(value = "/update/{replyId}")
@@ -36,6 +36,6 @@ public class ReplyController {
         Long boardId = replyService.updateReply(replyId, content);
         model.addAttribute("replies",replyService.getReplyList(boardId));
         model.addAttribute("userEmail", authentication.getName());
-        return "/pages/cards/board/replyCard";
+        return "pages/cards/board/replyCard";
     }
 }

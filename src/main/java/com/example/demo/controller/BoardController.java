@@ -33,20 +33,20 @@ public class BoardController {
                             Model model) {
         Pageable pageable = PageRequest.of(Integer.parseInt(page), 5, Sort.by("regTime").descending());
         model.addAttribute("page", boardService.getBoardList(pageable));
-        return "/pages/boards/boardInfo";
+        return "pages/boards/boardInfo";
     }
 
-    @PostMapping(value = "/info/{page}")
+    @GetMapping(value = "/info/{page}")
     public String boardPages(@PathVariable Integer page, Model model) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by("regTime").descending());
         model.addAttribute("page", boardService.getBoardList(pageable));
-        return "/pages/cards/board/pageCard";
+        return "pages/cards/board/pageCard";
     }
 
     @GetMapping(value = "/form")
     public String boardForm(Model model) {
         model.addAttribute("boardDto", new BoardDto());
-        return "/pages/boards/boardForm";
+        return "pages/boards/boardForm";
     }
 
     @PostMapping(value = "/form")
@@ -65,14 +65,14 @@ public class BoardController {
         model.addAttribute("userEmail", authentication.getName());
         model.addAttribute("boardDto", boardService.showDetail(boardId));
         model.addAttribute("replies", replyService.getReplyList(boardId));
-        return "/pages/boards/boardDetail";
+        return "pages/boards/boardDetail";
     }
 
     @PatchMapping(value = "/update")
     public String boardUpdate(@RequestBody BoardDto boardDto, Model model) {
         boardService.updateBoard(boardDto);
         model.addAttribute("boardDto", boardService.showDetail(boardDto.getId()));
-        return "/pages/cards/board/detailCard";
+        return "pages/cards/board/detailCard";
     }
 
     @DeleteMapping(value = "/delete/{boardId}")

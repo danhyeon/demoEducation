@@ -31,7 +31,7 @@ public class DupReplyController {
         Long boardId = dupReplyService.deleteDupReply(dupReplyId);
         model.addAttribute("replies",replyService.getReplyList(boardId));
         model.addAttribute("userEmail",authentication.getName());
-        return "/pages/cards/board/replyCard";
+        return "pages/cards/board/replyCard";
     }
 
     @PostMapping(value = "/update")

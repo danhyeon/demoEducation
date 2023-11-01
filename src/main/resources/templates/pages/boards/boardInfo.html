@@ -18,7 +18,7 @@
         let url = '/board/info/' + num;
         $.ajax({
           url: url,
-          type: "POST",
+          type: "GET",
           dataType: "html",
           cache: false,
           success: function(data) {
@@ -27,6 +27,9 @@
             pageCard.append(data);
             $('.active').removeClass('active');
             $(obj).parent().addClass('active');
+          },
+          error: function () {
+            window.location.href = '/member/login'
           }
         })
       }
