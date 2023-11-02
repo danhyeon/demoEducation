@@ -34,10 +34,10 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutSuccessUrl("/member/login")
-                .and().exceptionHandling()
+                .and()
+                .exceptionHandling()
                 .authenticationEntryPoint(ajaxAwareAuthenticationEntryPoint("/member/login"))
-                .accessDeniedPage("/accessdenied");//url
-                ;
+        ;
 
         httpSecurity.authorizeRequests()
                 .mvcMatchers("/").permitAll()
